@@ -1,8 +1,8 @@
-var User = require("../models/user.model");
-var JwtStrategy = require("passport-jwt").Strategy,
+const User = require("../models/user.model");
+const JwtStrategy = require("passport-jwt").Strategy,
     ExtractJwt = require("passport-jwt").ExtractJwt;
 
-var opts = {
+const opts = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: process.env.JWT_SECRET,
 };

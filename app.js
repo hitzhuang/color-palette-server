@@ -25,16 +25,14 @@ const authenticate = require("./middleware/authenticate");
 app.use("/api", require("./routes/auth.route"));
 app.use("/api/palettes", authenticate, require("./routes/palettes.route"));
 
-/* error handling of routes */
-app.use((err, req, res, next) => {
-    if (err) {
-        next(err);
-    } else {
-        let error = new Error("Not Found!");
-        error.status = 404;
-        next(error);
-    }
+/* error handling for undefined of routes */
+app.use((req, res, next) => {
+    let error = new Error("Not Found!");
+    error.status = 404;
+    next(error);
 });
+
+/* final error handling of routes */
 app.use((err, req, res, next) => {
     var error = { message: err.message || "Oops! Something went wrong." };
     if (err.errors) {

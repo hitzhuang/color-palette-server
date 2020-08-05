@@ -1,8 +1,10 @@
-var express = require("express");
-var router = express.Router();
-var controller = require("../controllers/palettes.controller");
+const express = require("express");
+const router = express.Router();
+const palettes = require("../controllers/palettes.controller");
+const validator = require("../validators/palette.validator");
+const requestErrors = require("../middleware/validateRequestError");
 
-router.get("/", controller.index);
-router.post("/", controller.create);
+router.route("/").post(validator.create, requestErrors, palettes.create);
+router.route("/:message_id").delete(palettes.remove);
 
 module.exports = router;

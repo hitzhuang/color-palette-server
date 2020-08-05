@@ -21,6 +21,20 @@ const PaletteSchema = new mongoose.Schema({
     },
 });
 
+PaletteSchema.pre("save", async function (next) {
+    try {
+        console.log("palette mongoose save....");
+        if (!this.isNew) return next();
+        console.log("addd......");
+        let user = await User.findById(this.user);
+        user.palettes.push(this.id);
+        await user.save();
+        return next();
+    } catch (error) {
+        return next(err);
+    }
+});
+
 PaletteSchema.pre("remove", async function (next) {
     try {
         let user = await User.findById(this.user);
@@ -28,7 +42,7 @@ PaletteSchema.pre("remove", async function (next) {
         await user.save();
         return next();
     } catch (err) {
-        return err;
+        return next(err);
     }
 });
 
@@ -50,5 +64,9 @@ module.exports.seeder = async (user) => {
 };
 
 module.exports.findAll = async (ids) => {
-    return await Palette.find().where("_id").in(ids).exec();
+    return await Palette.find()
+        .select("-user -__v")
+        .where("_id")
+        .in(ids)
+        .exec();
 };
