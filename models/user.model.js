@@ -15,6 +15,12 @@ const UserSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        palettes: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Palette",
+            },
+        ],
     },
     { timestamps: true }
 );

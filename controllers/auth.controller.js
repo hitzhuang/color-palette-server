@@ -1,11 +1,16 @@
-const { User, Token } = require("../models");
+const { User, Token, Palette } = require("../models");
 
 exports.register = async (req, res, next) => {
     try {
+        // create user and add default palettes
         const { email, username, password } = req.body;
         let user = await User.create({ email, username, password });
+        await Palette.seeder(user);
+
+        // response with jwt token, id, username, and default palettes
         let token = Token.generateJWT({ id: user._id, username });
-        res.status(200).json({ token, id: user._id, username });
+        let palettes = await Palette.findAll(user.palettes);
+        res.status(200).json({ token, id: user._id, username, palettes });
     } catch (error) {
         if (error.code === 11000) {
             return next({
@@ -34,10 +39,11 @@ exports.login = async (req, res, next) => {
         // check if valid password
         let isMatch = await user.validatePassword(password, next);
         if (isMatch) {
-            // respond with user info and jwt token
+            // response with jwt token, id, username, and user palettes
             const { username } = user;
+            let palettes = await Palette.findAll(user.palettes);
             let token = Token.generateJWT({ id: user._id, username });
-            res.status(200).json({ token, id: user._id, username });
+            res.status(200).json({ token, id: user._id, username, palettes });
         } else {
             return next({
                 status: 406,
