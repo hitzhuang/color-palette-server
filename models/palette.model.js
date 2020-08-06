@@ -63,7 +63,7 @@ module.exports.seeder = async (user) => {
     for (let i = 0; i < seeder.length; i++) {
         const s = seeder[i];
         let palette = await Palette.create({
-            name: s.paletteName,
+            name: s.name,
             emoji: s.emoji,
             colors: s.colors,
             user: user._id,
