@@ -1,25 +1,35 @@
 const mongoose = require("mongoose");
 const User = require("./user.model");
 const seeder = require("./data/palette.seeder");
-const PaletteSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
+const PaletteSchema = new mongoose.Schema(
+    {
+        name: {
+            type: String,
+            required: true,
+        },
+        emoji: {
+            type: String,
+            required: true,
+        },
+        colors: {
+            type: [mongoose.Schema.Types.Mixed],
+            default: [],
+        },
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+        },
     },
-    emoji: {
-        type: String,
-        required: true,
-    },
-    colors: {
-        type: [mongoose.Schema.Types.Mixed],
-        default: [],
-    },
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        required: true,
-    },
-});
+    {
+        toJSON: {
+            transform: function (doc, ret) {
+                ret.id = ret._id;
+                delete ret._id;
+            },
+        },
+    }
+);
 
 PaletteSchema.pre("save", async function (next) {
     try {

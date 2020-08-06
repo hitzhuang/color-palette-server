@@ -47,7 +47,7 @@ exports.login = async (req, res, next) => {
         } else {
             return next({
                 status: 406,
-                errors: { email: "Invalid password." },
+                errors: { password: "Invalid password." },
             });
         }
     } catch (error) {
