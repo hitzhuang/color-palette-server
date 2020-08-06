@@ -41,3 +41,12 @@ exports.remove = async (req, res, next) => {
         return next({ status: 400, message: error.message });
     }
 };
+
+exports.reload = async (req, res, next) => {
+    try {
+        let palettes = await Palette.findAll(req.user.palettes);
+        res.status(200).json({ palettes });
+    } catch (error) {
+        return next({ status: 400, message: error.message });
+    }
+};
