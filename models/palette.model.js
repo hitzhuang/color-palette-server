@@ -33,9 +33,7 @@ const PaletteSchema = new mongoose.Schema(
 
 PaletteSchema.pre("save", async function (next) {
     try {
-        console.log("palette mongoose save....");
         if (!this.isNew) return next();
-        console.log("addd......");
         let user = await User.findById(this.user);
         user.palettes.push(this.id);
         await user.save();

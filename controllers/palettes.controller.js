@@ -11,7 +11,7 @@ exports.create = async (req, res, next) => {
         if (duplicatedPalette) {
             return next({
                 status: 406,
-                errors: { email: "Sorry, the palette name has been taken." },
+                message: "Sorry, the palette name has been taken.",
             });
         }
 
@@ -34,7 +34,7 @@ exports.remove = async (req, res, next) => {
         } else {
             return next({
                 status: 404,
-                errors: { email: "The palette does not exist." },
+                message: "The palette does not exist.",
             });
         }
     } catch (error) {
